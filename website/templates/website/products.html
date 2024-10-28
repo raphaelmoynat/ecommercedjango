@@ -1,0 +1,27 @@
+{% extends "website/index.html" %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.desciption|truncatewords:20 }}</p>
+                                <a href="{% url 'show_product' product.id %}" class="btn btn-success btn-sm">Voir</a>                            </div>
+                            <div class="card-footer text-muted d-flex justify-content-between">
+                                    <div>
+                                        prix : {{ product.price }} €
+                                    </div>
+                                    <div>
+                                        {{ article.created_at }}
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+        </div>
+    </div>
+{% endblock %}

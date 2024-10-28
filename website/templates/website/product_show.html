@@ -1,0 +1,44 @@
+{% extends "website/index.html" %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ product.name }}</h5>
+                        <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                    </div>
+                    <div class="card-footer text-muted d-flex justify-content-between">
+                        <div>
+                            prix : {{ product.price }} €
+                        </div>
+                        <div class="d-flex flex-column">
+                            <div>
+                                {{ product.created_at}}
+                            </div>
+                            <div class="mt-2">
+                                {% if request.user == article.author %}
+                                    <a href="{% url 'delete_article' article.id %}" class="btn btn-danger">Supprimer</a>
+                                    <a href="{% url 'update_article' article.id %}" class="btn btn-warning">Modifier</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+    <div class="mt-5 container d-flex justify-content-center">
+        <a href="{% url 'product' %}" class="btn btn-secondary">Retour</a>
+    </div>
+
+{% endblock %}

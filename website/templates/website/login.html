@@ -1,0 +1,20 @@
+{% extends "website/index.html" %}
+
+{% block body %}
+     <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h1>Login</h1>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        {{ form }}
+                    </div>
+                    <button type="submit" class="btn btn-success">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
