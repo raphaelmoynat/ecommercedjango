@@ -19,10 +19,11 @@
                                 {{ product.created_at}}
                             </div>
                             <div class="mt-2">
-                                {% if request.user == article.author %}
-                                    <a href="{% url 'delete_article' article.id %}" class="btn btn-danger">Supprimer</a>
-                                    <a href="{% url 'update_article' article.id %}" class="btn btn-warning">Modifier</a>
+                                {% if request.user.is_superuser %}
+                                    <a href="{% url 'delete_product' product.id %}" class="btn btn-danger">Supprimer</a>
+                                    <a href="{% url 'update_product' product.id %}" class="btn btn-warning">Modifier</a>
                                 {% endif %}
+                                <a href="{% url 'add_to_cart' product.id %}" class="btn btn-primary">Add to cart</a>
                             </div>
                         </div>
                     </div>

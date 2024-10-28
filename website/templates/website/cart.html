@@ -1,0 +1,46 @@
+{% extends 'website/index.html' %}
+
+{% block body %}
+<div class="container mt-3">
+    <div class="row justify-content-center">
+            <h3 class="text-center mb-4">Panier de {{ user.username }}</h3>
+
+    <table class="table mt-5" style="line-height: 3rem;">
+        <thead>
+        <tr>
+            <th scope="col">Produit</th>
+            <th scope="col">Prix</th>
+            <th scope="col">Quantité</th>
+            <th scope="col">Sous-total</th>
+            <th scope="col">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+            {% for item in cart %}
+            <tr>
+                <th scope="row">{{ item.product.name }}</th>
+                <td>{{ item.product.price }} €</td>
+                <td>
+                    <a href="{% url 'app_cart_remove' item.product.id %}" class="btn btn-warning me-2"><i class="bi bi-dash"></i></a>
+                    {{ item.quantity }}
+                    <a href="{% url 'add_to_cart' item.product.id %}" class="btn btn-success ms-2"><i class="bi bi-plus"></i></a>
+                </td>
+                <td>{{ item.subtotal }} €</td>
+                <td>
+                    <a href="{% url 'app_cart_remove_row' item.product.id %}" class="btn btn-danger"><i class="bi bi-trash3"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+
+            <tr class="mt-3">
+                <td><a href="{% url 'app_empty_cart' %}" class="btn btn-danger">Vider panier</a></td>
+                <td></td>
+                <td></td>
+                <td><strong>Total</strong> : {{ total }} €</td>
+                <td><a href="#" class="btn btn-success">Valider <i class="bi bi-bag-check"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -22,12 +22,18 @@ from website import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('website/', views.index, name='index'),
-    path('product/', views.product, name='product'),
+    path('', views.product, name='product'),
     path('add/', views.add_product, name='add_product'),
     path('register/', views.user_register, name='register'),
     path('login/', views.user_login, name='login'),
     path('logout/', views.user_logout, name='logout'),
-
     path('article/<int:product_id>/', views.show_product, name='show_product'),
+    path('product/delete/<int:product_id>/', views.delete_product, name='delete_product'),
+    path('product/edit/<int:product_id>/', views.update_product, name='update_product'),
+    path('cart/', views.view_cart, name='view_cart'),
+    path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/remove/<int:product_id>/', views.remove_from_cart, name='app_cart_remove'),
+    path('cart/remove_row/<int:product_id>/', views.remove_row, name='app_cart_remove_row'),
+    path('cart/empty/', views.empty_cart, name='app_empty_cart'),
 
 ]
