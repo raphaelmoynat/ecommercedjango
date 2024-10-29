@@ -1,0 +1,31 @@
+{% extends 'website/index.html' %}
+
+{% block body %}
+<div class="container mt-3">
+    <h3 class="text-center mb-4">Récapitulatif de la commande</h3>
+    <table class="table mt-5">
+        <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Sous-total</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.product.price }} €</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.subtotal }} €</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>{{ order.total }} €</strong></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

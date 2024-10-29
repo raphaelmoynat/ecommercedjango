@@ -1,0 +1,15 @@
+{% extends 'website/index.html' %}
+
+{% block body %}
+<div class="container">
+    <h2>Commande confirmée</h2>
+    <p>Merci pour votre commande, {{ order.user.username }}!</p>
+    <h3>Détails de la commande :</h3>
+    <ul>
+        {% for item in order.items.all %}
+        <li>{{ item.product.name }} - {{ item.quantity }} x {{ item.product.price }} € = {{ item.subtotal }} €</li>
+        {% endfor %}
+    </ul>
+    <p>Total: {{ order.total }} €</p>
+</div>
+{% endblock %}

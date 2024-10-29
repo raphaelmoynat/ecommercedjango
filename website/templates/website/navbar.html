@@ -13,8 +13,14 @@
                 {% endif %}
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">{{ user.username }}</a>
+                        <a class="nav-link" href="{% url 'profile' %}">{{ user.username }}</a>
                     </li>
+                    {% if user.is_superuser %}
+                        <li>
+                            <a class="nav-link" href="{% url 'all_orders' %}">All orders</a>
+                        </li>
+                    {% endif %}
+
                      <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                     </li>

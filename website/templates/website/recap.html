@@ -1,0 +1,32 @@
+{% extends 'website/index.html' %}
+
+{% block body %}
+<div class="container mt-3">
+    <h3 class="text-center mb-4">Récapitulatif de votre panier</h3>
+    <table class="table mt-5">
+        <thead>
+        <tr>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Sous-total</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.product.price }} €</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.subtotal }} €</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3"><strong>Total</strong></td>
+                <td><strong>{{ total }} €</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="{% url 'confirm_order' %}" class="btn btn-primary">Confirmer et Payer</a>
+</div>
+{% endblock %}

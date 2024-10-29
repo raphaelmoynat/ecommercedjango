@@ -1,10 +1,19 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from website.models import Product
+
+from website.models import Product, Order, OrderItem
 
 from website.forms import ProductForm, RegisterForm, LoginForm
 from django.contrib.auth import authenticate, login, logout
+
+
+
+import stripe
+from django.conf import settings
+
+from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
 
 
 
@@ -154,4 +163,93 @@ def remove_row(request, product_id):
 def empty_cart(request):
     request.session['cart'] = {}
     return redirect('view_cart')
+
+def recap(request):
+    cart = request.session.get('cart', {})
+    cart_items = []
+    total = 0
+
+    for product_id, quantity in cart.items():
+        product = Product.objects.get(id=product_id)
+        subtotal = product.price * quantity
+        cart_items.append({'product': product, 'quantity': quantity, 'subtotal': subtotal})
+        total += subtotal
+
+    return render(request, 'website/recap.html', {
+        'cart_items': cart_items,
+        'total': total,
+    })
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+def confirm_order(request):
+    if request.user.is_authenticated:
+        cart = request.session.get('cart', {})
+        order_items = []
+        total_amount = 0
+
+        for product_id, quantity in cart.items():
+            product = Product.objects.get(id=product_id)
+            subtotal = int(product.price * quantity * 100)
+            order_items.append({
+                'price_data': {
+                    'currency': 'eur',
+                    'product_data': {
+                        'name': product.name,
+                    },
+                    'unit_amount': int(product.price * 100),
+                },
+                'quantity': quantity,
+            })
+            total_amount += subtotal
+
+        session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=order_items,
+            mode='payment',
+            success_url=request.build_absolute_uri('/order/success/'),
+            cancel_url=request.build_absolute_uri('/recap/'),
+        )
+
+        return redirect(session.url, code=303)
+    else:
+        return redirect('product')
+
+@csrf_exempt
+def payment_success(request):
+    cart = request.session.get('cart', {})
+    total = 0
+    order = Order.objects.create(user=request.user, total=total, date=timezone.now())
+
+    for product_id, quantity in cart.items():
+        product = Product.objects.get(id=product_id)
+        subtotal = product.price * quantity
+        OrderItem.objects.create(order=order, product=product, quantity=quantity, subtotal=subtotal)
+        total += subtotal
+    order.total = total
+    order.save()
+    request.session['cart'] = {}
+
+    return render(request, 'website/payment_success.html', {'order': order})
+
+def order(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'website/order.html', {'order': order})
+
+def profile(request):
+    if request.user.is_authenticated:
+        orders = Order.objects.filter(user=request.user)
+        return render(request, 'website/profile.html', {'orders': orders})
+    else:
+        return redirect('product')
+
+
+def all_orders(request):
+    if request.user.is_superuser:
+        orders = Order.objects.all()
+        return render(request, 'website/all_orders.html', {'orders': orders})
+    else:
+        return redirect('product')
+
+
 
