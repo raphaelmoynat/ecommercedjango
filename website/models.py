@@ -8,6 +8,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now=True, null=True)
+    image = models.ImageField(upload_to='product_images/', null=True, blank=True)
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

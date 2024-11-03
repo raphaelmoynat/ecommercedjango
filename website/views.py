@@ -54,13 +54,13 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('home')
+    return redirect('product')
 
 def add_product(request):
     if request.user.is_superuser:
         form = ProductForm()
         if request.method == 'POST':
-            form = ProductForm(request.POST)
+            form = ProductForm(request.POST, request.FILES)
             if form.is_valid():
                 product = form.save(commit=False)
                 product.author = request.user
@@ -85,24 +85,25 @@ def delete_product(request, product_id):
     else:
         return redirect('product')
 
-def update_product(request, product_id):
-        product = get_object_or_404(Product, id=product_id)
-        if request.user.is_superuser:
-            if request.method == 'POST':
-                form = ProductForm(request.POST, instance=product)
-                if form.is_valid():
-                    form.save()
-                    return redirect('show_product', article_id=product.id)
-            else:
-                form = ProductForm(instance=product)
-            return render(request, 'website/add_product.html', {
-                'form': form,
-                'product': product,
-                'btnValue': 'Modifier'
-            })
 
+def update_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    if request.user.is_superuser:
+        if request.method == 'POST':
+            form = ProductForm(request.POST, request.FILES, instance=product)
+            if form.is_valid():
+                form.save()
+                return redirect('show_product', product_id=product.id)
         else:
-            return redirect('product')
+            form = ProductForm(instance=product)
+
+        return render(request, 'website/add_product.html', {
+            'form': form,
+            'product': product,
+            'btnValue': 'Modifier'
+        })
+    else:
+        return redirect('product')
 
 
 def add_to_cart(request, product_id):

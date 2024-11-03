@@ -7,10 +7,14 @@
                 {% for product in products %}
                     <div class="col-md-4 mb-4">
                         <div class="card shadow-sm">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
+                            {% endif %}
                             <div class="card-body">
                                 <h5 class="card-title text-primary">{{ product.name }}</h5>
                                 <p class="card-text">{{ product.desciption|truncatewords:20 }}</p>
-                                <a href="{% url 'show_product' product.id %}" class="btn btn-success btn-sm">Voir</a>                            </div>
+                                <a href="{% url 'show_product' product.id %}" class="btn btn-success btn-sm">Voir</a>
+                            </div>
                             <div class="card-footer text-muted d-flex justify-content-between">
                                     <div>
                                         prix : {{ product.price }} €

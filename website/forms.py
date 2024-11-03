@@ -7,16 +7,19 @@ from django.contrib.auth.models import User
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'description', 'price']
+        fields = ['name', 'description', 'price', 'image']
         labels = {
             'name': 'Nom',
             'description': 'Description',
             'price': 'Prix',
+            'image': 'Image'
+
         }
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 5, 'placeholder': 'Description'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Prix'}),
+            'image': forms.FileInput(attrs={'class': 'form-control', 'placeholder': 'Image'}),
         }
 
 
