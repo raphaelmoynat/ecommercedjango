@@ -8,7 +8,7 @@
                     <div class="col-md-4 mb-4">
                         <div class="card shadow-sm">
                             {% if product.image %}
-                                <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
+                                <img src="{{ product.image.url }}" class="card-img-top img-fluid" style="height: 300px" alt="{{ product.name }}">
                             {% endif %}
                             <div class="card-body">
                                 <h5 class="card-title text-primary">{{ product.name }}</h5>
